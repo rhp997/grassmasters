@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "firebase emulators:start --only hosting,firestore,auth,functions --export-on-exit=.emulator-data --import=.emulator-data",
     "make-admin": "node scripts/make-admin.js",
+    "make-admin-prod": "node scripts/make-admin-prod.js",
     "deploy": "firebase deploy --only hosting",
     "deploy:rules": "firebase deploy --only firestore",
     "deploy:all": "firebase deploy"
