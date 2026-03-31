@@ -66,8 +66,9 @@ The website should be themed to complement the logo found at /docs/logo.pdf and 
 - **users** (Firebase Auth + Firestore mirror for profile data)
   - Fields: uid, email, phone, displayName, role (admin/customer), zipCode (validated 8820x)
 
-- **clients** (contacts – managed by Admin only)
-  - Fields: clientId, name, address, phone, email, notes, createdBy, lastServiceDate
+- **clients** (contacts – managed by Admin; auto-created on customer first sign-in)
+  - Fields: clientId, uid (Firebase Auth UID), name, address, phone, email, notes, createdBy, lastServiceDate
+  - A client record is automatically created in a batch write with the user profile when a non-admin user signs in for the first time (`createdBy: 'self-signup'`). Admins can then enrich the record with address, notes, etc.
 
 - **appointments** (calendar entries)
   - Fields: appointmentId, clientId, dateTime (ISO), serviceType (mow/trim/fertilize/etc.), durationMinutes, status (scheduled/completed/cancelled), notes, paymentStatus (pending/paid), paymentAmount, paymentDate, paidBy (cash/check)

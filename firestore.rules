@@ -23,9 +23,15 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    // clients collection: admin only
+    // clients collection: admins have full access;
+    // users can create their own record on first sign-in and read/update it
     match /clients/{clientId} {
       allow read, write: if isAdmin();
+      allow create: if isAuthenticated()
+                    && request.resource.data.uid == request.auth.uid;
+      allow read, update: if isAuthenticated()
+                          && resource.data.uid == request.auth.uid
+                          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['uid', 'createdAt', 'createdBy']);
     }
 
     // appointments collection: admin full access; customers can read their own

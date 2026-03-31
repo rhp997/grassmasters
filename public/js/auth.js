@@ -58,19 +58,40 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 async function ensureUserProfile(user, role) {
-  const ref = db.collection('users').doc(user.uid);
+  const ref  = db.collection('users').doc(user.uid);
   const snap = await ref.get();
-  if (!snap.exists) {
-    await ref.set({
-      uid:         user.uid,
-      email:       user.email,
-      displayName: user.displayName || '',
-      phone:       '',
-      role,
-      zipCode:     '',
-      createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+  if (snap.exists) return;
+
+  const batch = db.batch();
+
+  // Create user profile doc
+  batch.set(ref, {
+    uid:         user.uid,
+    email:       user.email,
+    displayName: user.displayName || '',
+    phone:       '',
+    role,
+    zipCode:     '',
+    createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  // Auto-create a client record for non-admin users
+  if (role !== 'admin') {
+    const clientRef = db.collection('clients').doc();
+    batch.set(clientRef, {
+      uid:             user.uid,
+      name:            user.displayName || user.email.split('@')[0],
+      email:           user.email,
+      phone:           '',
+      address:         '',
+      notes:           '',
+      createdBy:       'self-signup',
+      createdAt:       firebase.firestore.FieldValue.serverTimestamp(),
+      lastServiceDate: null
     });
   }
+
+  await batch.commit();
 }
 
 // ── Nav updates ───────────────────────────────────────────────────────────────

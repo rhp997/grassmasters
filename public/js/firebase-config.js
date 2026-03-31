@@ -20,14 +20,16 @@ const IS_EMULATOR = (
 // Initialize Firebase app (compat SDK loaded via CDN in index.html)
 firebase.initializeApp(FIREBASE_CONFIG);
 
-const db   = firebase.firestore();
-const auth = firebase.auth();
+const db        = firebase.firestore();
+const auth      = firebase.auth();
+const functions = firebase.functions();
 
-// Connect to emulators when running locally
+// Connect to emulators when running locally (hosting: 5003)
 if (IS_EMULATOR) {
   console.log('[GrassMasters] Using Firebase Emulators');
   auth.useEmulator('http://127.0.0.1:9099');
   db.useEmulator('127.0.0.1', 8080);
+  functions.useEmulator('127.0.0.1', 5001);
 }
 
 // Roswell, NM valid ZIP codes

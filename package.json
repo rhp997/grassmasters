@@ -1,0 +1,13 @@
+{
+  "name": "grassmasters",
+  "description": "Dodson Grass Masters — lawn care scheduling app for Roswell, NM",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "firebase emulators:start --only hosting,firestore,auth,functions --export-on-exit=.emulator-data --import=.emulator-data",
+    "make-admin": "node scripts/make-admin.js",
+    "deploy": "firebase deploy --only hosting",
+    "deploy:rules": "firebase deploy --only firestore",
+    "deploy:all": "firebase deploy"
+  }
+}
