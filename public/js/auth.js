@@ -58,15 +58,21 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 async function ensureUserProfile(user, role) {
-  const ref  = db.collection('users').doc(user.uid);
-  const snap = await ref.get();
+  // Use uid as the document ID for both collections — enables direct gets
+  // instead of queries, and simplifies security rule matching
+  const userRef   = db.collection('users').doc(user.uid);
+  const clientRef = db.collection('clients').doc(user.uid);
+
+  const [userSnap, clientSnap] = await Promise.all([
+    userRef.get(),
+    role !== 'admin' ? clientRef.get() : Promise.resolve({ exists: true })
+  ]);
 
   const batch = db.batch();
   let needsCommit = false;
 
-  // Create user profile doc if missing
-  if (!snap.exists) {
-    batch.set(ref, {
+  if (!userSnap.exists) {
+    batch.set(userRef, {
       uid:         user.uid,
       email:       user.email,
       displayName: user.displayName || '',
@@ -78,29 +84,19 @@ async function ensureUserProfile(user, role) {
     needsCommit = true;
   }
 
-  // Create client record if missing — checked independently so the signup
-  // form's explicit users-doc write doesn't prevent client creation
-  if (role !== 'admin') {
-    const existing = await db.collection('clients')
-      .where('uid', '==', user.uid)
-      .limit(1)
-      .get();
-
-    if (existing.empty) {
-      const clientRef = db.collection('clients').doc();
-      batch.set(clientRef, {
-        uid:             user.uid,
-        name:            user.displayName || user.email.split('@')[0],
-        email:           user.email,
-        phone:           '',
-        address:         '',
-        notes:           '',
-        createdBy:       'self-signup',
-        createdAt:       firebase.firestore.FieldValue.serverTimestamp(),
-        lastServiceDate: null
-      });
-      needsCommit = true;
-    }
+  if (!clientSnap.exists) {
+    batch.set(clientRef, {
+      uid:             user.uid,
+      name:            user.displayName || user.email.split('@')[0],
+      email:           user.email,
+      phone:           '',
+      address:         '',
+      notes:           '',
+      createdBy:       'self-signup',
+      createdAt:       firebase.firestore.FieldValue.serverTimestamp(),
+      lastServiceDate: null
+    });
+    needsCommit = true;
   }
 
   if (needsCommit) await batch.commit();
