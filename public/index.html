@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dodson Grass Masters — Professional lawn care services in Roswell, NM. Mowing, edging, blowing, weeding, fertilizing, and planting.">
+  <meta name="theme-color" content="#2D6A27">
+  <title>Dodson Grass Masters — Roswell, NM</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="apple-touch-icon" href="/images/icon-192.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons 1.11.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- FullCalendar 6 -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+
+  <!-- App Styles -->
+  <link href="/css/global.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ── Roswell-only Banner ───────────────────────────────────────────────── -->
+  <div class="roswell-banner">
+    <i class="bi bi-geo-alt-fill me-1"></i>
+    Proudly serving <strong>Roswell, NM</strong> — ZIP codes 88201 · 88202 · 88203
+  </div>
+
+  <!-- ── Navbar ────────────────────────────────────────────────────────────── -->
+  <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="#home">
+        <img src="/images/logo.svg" alt="Dodson Grass Masters logo">
+        <span>Dodson<small>Grass Masters</small></span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navContent">
+        <!-- Public nav links -->
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1 nav-public-links">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#rates">Rates</a></li>
+          <li class="nav-item"><a class="nav-link" href="#schedule-info">How It Works</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="nav-link btn-nav-login" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+              <i class="bi bi-person-circle me-1"></i>Sign In
+            </a>
+          </li>
+        </ul>
+
+        <!-- Authenticated user menu -->
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1 d-none" id="nav-user-menu">
+          <li class="nav-item">
+            <span class="nav-link text-white pe-none">
+              <i class="bi bi-person-fill me-1" style="color:var(--gm-lime)"></i>
+              <span id="nav-user-name">User</span>
+              <small class="ms-1 badge" style="background:var(--gm-lime);color:var(--gm-text-dark);font-size:.65rem" id="nav-user-role">customer</small>
+            </span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn-nav-login" href="#" id="logout-btn">
+              <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <!-- PUBLIC CONTENT (visible to guests)                                      -->
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <div id="public-content" style="padding-top: 66px;">
+
+    <!-- ── Hero / Landing ──────────────────────────────────────────────────── -->
+    <section id="home">
+      <div class="container position-relative" style="z-index:1">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6 text-center text-lg-start">
+            <img src="/images/logo.svg" alt="Dodson Grass Masters" class="hero-logo">
+            <div class="hero-badge"><i class="bi bi-geo-alt-fill"></i> Roswell, NM Only</div>
+            <h1 class="hero-tagline">
+              Your Lawn,<br>
+              <span class="accent">Perfectly Mastered.</span>
+            </h1>
+            <p class="hero-sub">
+              Professional mowing, edging, weeding, fertilizing, and planting —
+              trusted by Roswell homeowners all season long.
+            </p>
+            <div class="mb-4">
+              <span class="service-chip"><i class="bi bi-scissors"></i> Mowing</span>
+              <span class="service-chip"><i class="bi bi-reception-4"></i> Edging</span>
+              <span class="service-chip"><i class="bi bi-wind"></i> Blowing</span>
+              <span class="service-chip"><i class="bi bi-flower1"></i> Weeding</span>
+              <span class="service-chip"><i class="bi bi-droplet"></i> Fertilizing</span>
+              <span class="service-chip"><i class="bi bi-tree"></i> Planting</span>
+            </div>
+            <a href="#rates" class="btn-gm-primary me-3">View Rates</a>
+            <a href="#contact" class="btn-gm-outline">Get in Touch</a>
+          </div>
+          <div class="col-lg-6 d-none d-lg-flex justify-content-center">
+            <!-- Decorative grass illustration placeholder -->
+            <div class="text-center" style="opacity:.85">
+              <svg viewBox="0 0 360 260" width="360" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="180" cy="230" rx="160" ry="20" fill="#1B4D1A" opacity=".4"/>
+                <g fill="#4E9C3F">
+                  <rect x="60" y="80" width="18" height="140" rx="9"/>
+                  <rect x="90" y="60" width="18" height="160" rx="9"/>
+                  <rect x="120" y="90" width="18" height="130" rx="9"/>
+                  <rect x="150" y="50" width="20" height="170" rx="10"/>
+                  <rect x="182" y="70" width="20" height="150" rx="10"/>
+                  <rect x="214" y="85" width="18" height="135" rx="9"/>
+                  <rect x="244" y="55" width="18" height="165" rx="9"/>
+                  <rect x="274" y="75" width="18" height="145" rx="9"/>
+                </g>
+                <g fill="#B8E04A">
+                  <ellipse cx="69" cy="80" rx="14" ry="8"/>
+                  <ellipse cx="99" cy="60" rx="14" ry="8"/>
+                  <ellipse cx="129" cy="90" rx="14" ry="8"/>
+                  <ellipse cx="160" cy="50" rx="15" ry="9"/>
+                  <ellipse cx="192" cy="70" rx="15" ry="9"/>
+                  <ellipse cx="223" cy="85" rx="14" ry="8"/>
+                  <ellipse cx="253" cy="55" rx="14" ry="8"/>
+                  <ellipse cx="283" cy="75" rx="14" ry="8"/>
+                </g>
+                <rect x="40" y="220" width="280" height="20" rx="4" fill="#2D6A27"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Rates Section ───────────────────────────────────────────────────── -->
+    <section id="rates" class="section-pad">
+      <div class="container">
+        <div class="section-header text-center">
+          <p class="eyebrow"><i class="bi bi-tag-fill me-1"></i>Transparent Pricing</p>
+          <h2><span class="lime-underline">Lawn Care Rates</span></h2>
+          <p class="lead">Fair, flat rates for Roswell, NM properties. No hidden fees.</p>
+        </div>
+
+        <div class="row g-4">
+          <!-- Mowing -->
+          <div class="col-sm-6 col-lg-4">
+            <div class="rate-card featured">
+              <div class="icon-wrap"><i class="bi bi-scissors"></i></div>
+              <h5>Lawn Mowing</h5>
+              <div class="price">$35<span>–$65</span></div>
+              <p>Full mow including front, back, and side yards. Price varies by lot size.</p>
+              <div class="mt-3">
+                <small class="text-white-50">Small (up to ¼ acre): $35</small><br>
+                <small class="text-white-50">Medium (¼–½ acre): $50</small><br>
+                <small class="text-white-50">Large (½+ acre): $65+</small>
+              </div>
+            </div>
+          </div>
+          <!-- Edging -->
+          <div class="col-sm-6 col-lg-4">
+            <div class="rate-card">
+              <div class="icon-wrap"><i class="bi bi-reception-4"></i></div>
+              <h5>Edging</h5>
+              <div class="price">$20<span> add-on</span></div>
+              <p>Clean edge cuts along driveways, sidewalks, and flower beds. Often bundled with mowing.</p>
+            </div>
+          </div>
+          <!-- Blowing -->
+          <div class="col-sm-6 col-lg-4">
+            <div class="rate-card">
+              <div class="icon-wrap"><i class="bi bi-wind"></i></div>
+              <h5>Blowing / Cleanup</h5>
+              <div class="price">$15<span> add-on</span></div>
+              <p>Blowing clippings off hard surfaces — driveways, walkways, patios. Included free with full-service packages.</p>
+            </div>
+          </div>
+          <!-- Weeding -->
+          <div class="col-sm-6 col-lg-4">
+            <div class="rate-card">
+              <div class="icon-wrap"><i class="bi bi-flower1"></i></div>
+              <h5>Weeding</h5>
+              <div class="price">$30<span>–$60</span></div>
+              <p>Hand-pull and remove weeds from flower beds, gardens, and lawn areas. Price based on area and density.</p>
+            </div>
+          </div>
+          <!-- Fertilizing -->
+          <div class="col-sm-6 col-lg-4">
+            <div class="rate-card">
+              <div class="icon-wrap"><i class="bi bi-droplet"></i></div>
+              <h5>Fertilizing</h5>
+              <div class="price">$45<span>–$80</span></div>
+              <p>Professional-grade lawn fertilizer application. Granular or liquid treatments. Seasonal scheduling available.</p>
+            </div>
+          </div>
+          <!-- Planting -->
+          <div class="col-sm-6 col-lg-4">
+            <div class="rate-card">
+              <div class="icon-wrap"><i class="bi bi-tree"></i></div>
+              <h5>Planting</h5>
+              <div class="price">$50<span>+</span></div>
+              <p>Installation of annuals, perennials, shrubs, and ground cover. Plants billed separately at cost.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Service Bundle -->
+        <div class="row g-4 mt-1">
+          <div class="col-lg-8 mx-auto">
+            <div class="hourly-note">
+              <div class="row align-items-center">
+                <div class="col-md-8">
+                  <h4><i class="bi bi-star-fill me-2"></i>Full-Service Package</h4>
+                  <p>Mow + Edge + Blow — our most popular bundle. Save $10 off individual service prices.</p>
+                  <strong class="text-white">Starting at $60 for small lots · $75 medium · $95+ large</strong>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                  <div class="price text-white" style="font-size:2.2rem">$60<span class="text-white-50" style="font-size:1rem">+</span></div>
+                  <small class="text-white-50">per visit</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="hourly-note" style="background: linear-gradient(135deg, #4E5D50, #3a4a3b);">
+              <h4><i class="bi bi-tools me-2"></i>Hourly Rate</h4>
+              <p>Services not listed above (custom projects, cleanup, etc.)</p>
+              <div class="price text-white" style="font-size:2rem">$45<span class="text-white-50" style="font-size:1rem">/hr</span></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-center text-muted mt-4 small">
+          <i class="bi bi-info-circle me-1"></i>
+          All payments collected on-site (cash or check). Prices may vary based on property condition.
+          Contact us for a free estimate!
+        </p>
+      </div>
+    </section>
+
+    <!-- ── How It Works ────────────────────────────────────────────────────── -->
+    <section id="schedule-info" class="section-pad">
+      <div class="container">
+        <div class="section-header text-center">
+          <p class="eyebrow"><i class="bi bi-calendar-check me-1"></i>Simple Process</p>
+          <h2><span class="lime-underline">How It Works</span></h2>
+          <p class="lead">Getting your lawn serviced is easy. Here's what to expect.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+          <div class="col-sm-6 col-lg-3">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <h5>Contact Us</h5>
+              <p>Call, text, or fill out our contact form. We'll respond within 24 hours to confirm your details.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <h5>We Schedule</h5>
+              <p>We find a time that works for you and add it to our calendar. You'll receive a confirmation.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <h5>We Show Up</h5>
+              <p>Our team arrives on time and gets the job done right — no supervision needed from you.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="step-card">
+              <div class="step-num">4</div>
+              <h5>Pay On-Site</h5>
+              <p>Pay by cash or check when the job is complete. Simple, straightforward, no surprises.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <p class="text-muted mb-3">Already a customer? Sign in to view your appointments.</p>
+          <a href="#" class="btn-gm-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-calendar3 me-2"></i>View My Appointments
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact Section ─────────────────────────────────────────────────── -->
+    <section id="contact" class="section-pad">
+      <div class="container">
+        <div class="section-header text-center">
+          <p class="eyebrow"><i class="bi bi-chat-dots me-1"></i>Get in Touch</p>
+          <h2><span class="lime-underline">Contact Us</span></h2>
+          <p class="lead">Ready for a greener lawn? Reach out — we'd love to help.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+          <!-- Contact Info -->
+          <div class="col-lg-4">
+            <div class="contact-card h-100">
+              <h5 class="mb-4" style="color:var(--gm-green-dark)">Dodson Grass Masters</h5>
+              <div class="contact-info-item">
+                <i class="bi bi-geo-alt-fill"></i>
+                <div>
+                  <strong>Service Area</strong>
+                  <span>Roswell, NM 88201 · 88202 · 88203</span>
+                </div>
+              </div>
+              <div class="contact-info-item">
+                <i class="bi bi-telephone-fill"></i>
+                <div>
+                  <strong>Phone / Text</strong>
+                  <!-- TODO: Replace with actual phone number -->
+                  <span><a href="tel:+15755551234">(575) 555-1234</a></span>
+                </div>
+              </div>
+              <div class="contact-info-item">
+                <i class="bi bi-envelope-fill"></i>
+                <div>
+                  <strong>Email</strong>
+                  <!-- TODO: Replace with actual email -->
+                  <span><a href="mailto:info@dodsonGrassMasters.com">info@dodsonGrassMasters.com</a></span>
+                </div>
+              </div>
+              <div class="contact-info-item">
+                <i class="bi bi-clock-fill"></i>
+                <div>
+                  <strong>Hours</strong>
+                  <span>Mon–Sat · 7:00 AM – 6:00 PM MT</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 border-top">
+                <p class="small text-muted mb-0">
+                  <i class="bi bi-cash-stack me-1 text-success"></i>
+                  We accept <strong>cash</strong> and <strong>check</strong> on-site. No online payments required.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="col-lg-6">
+            <div class="contact-card">
+              <h5 class="mb-4" style="color:var(--gm-green-dark)">Send a Message</h5>
+              <!-- TODO: Add action="https://formspree.io/f/YOUR_ID" method="POST" when Formspree account is ready -->
+              <form id="contact-form">
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label class="form-label">Your Name *</label>
+                    <input type="text" class="form-control" name="name" required placeholder="Jane Smith">
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" name="phone" placeholder="(575) 555-0000">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Email Address *</label>
+                    <input type="email" class="form-control" name="email" required placeholder="jane@example.com">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">ZIP Code *</label>
+                    <input type="text" class="form-control" name="zip" required placeholder="88201" maxlength="5" pattern="8820[123]">
+                    <div class="form-text">We serve ZIP codes 88201, 88202, and 88203 only.</div>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Service Needed</label>
+                    <select class="form-select" name="service">
+                      <option value="">— Select a service —</option>
+                      <option>Lawn Mowing</option>
+                      <option>Edging</option>
+                      <option>Blowing / Cleanup</option>
+                      <option>Weeding</option>
+                      <option>Fertilizing</option>
+                      <option>Planting</option>
+                      <option>Full-Service Package</option>
+                      <option>Other / Custom</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-control" name="message" rows="3" placeholder="Tell us about your yard and what you need…"></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn-gm w-100">
+                      <i class="bi bi-send me-2"></i>Send Message
+                    </button>
+                    <p class="small text-muted mt-2 mb-0 text-center" id="contact-form-msg"></p>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ──────────────────────────────────────────────────────────── -->
+    <footer>
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-4 footer-logo">
+            <img src="/images/logo.svg" alt="Dodson Grass Masters">
+            <p class="mt-2" style="font-size:.9rem">
+              Professional lawn care for Roswell, NM.<br>
+              Serving 88201 · 88202 · 88203
+            </p>
+          </div>
+          <div class="col-sm-4 col-lg-2">
+            <h6>Services</h6>
+            <ul class="list-unstyled">
+              <li><a href="#rates">Mowing</a></li>
+              <li><a href="#rates">Edging</a></li>
+              <li><a href="#rates">Weeding</a></li>
+              <li><a href="#rates">Fertilizing</a></li>
+              <li><a href="#rates">Planting</a></li>
+            </ul>
+          </div>
+          <div class="col-sm-4 col-lg-2">
+            <h6>Company</h6>
+            <ul class="list-unstyled">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#rates">Rates</a></li>
+              <li><a href="#schedule-info">How It Works</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="col-sm-4 col-lg-4">
+            <h6>Contact</h6>
+            <!-- TODO: Replace with actual contact info -->
+            <p style="font-size:.9rem"><i class="bi bi-telephone-fill me-2" style="color:var(--gm-lime)"></i><a href="tel:+15755551234">(575) 555-1234</a></p>
+            <p style="font-size:.9rem"><i class="bi bi-envelope-fill me-2" style="color:var(--gm-lime)"></i><a href="mailto:info@dodsonGrassMasters.com">info@dodsonGrassMasters.com</a></p>
+            <p style="font-size:.9rem"><i class="bi bi-clock-fill me-2" style="color:var(--gm-lime)"></i>Mon–Sat · 7am–6pm MT</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          &copy; <span id="footer-year"></span> Dodson Grass Masters · Roswell, NM · All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </div><!-- /public-content -->
+
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <!-- APP SHELL (visible after login)                                          -->
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <div id="app-shell" class="d-none">
+    <div class="d-flex" style="min-height: calc(100vh - 66px);">
+
+      <!-- ── Admin Dashboard ──────────────────────────────────────────────── -->
+      <div id="admin-dash" class="d-none d-flex w-100">
+
+        <!-- Admin Sidebar -->
+        <nav class="dashboard-sidebar d-none d-lg-block" id="admin-sidebar">
+          <div class="sidebar-label">Overview</div>
+          <div class="sidebar-section">
+            <ul class="nav flex-column sidebar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" href="#" data-view="overview">
+                  <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-view="calendar">
+                  <i class="bi bi-calendar3"></i> Calendar
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="sidebar-label">Management</div>
+          <div class="sidebar-section">
+            <ul class="nav flex-column sidebar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-view="appointments">
+                  <i class="bi bi-clipboard-check"></i> Appointments
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-view="clients">
+                  <i class="bi bi-people"></i> Clients
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-view="payments">
+                  <i class="bi bi-cash-stack"></i> Payments
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Admin Main Content -->
+        <main class="dashboard-main">
+          <!-- Mobile nav tabs -->
+          <div class="d-lg-none mb-3">
+            <ul class="nav nav-pills gap-2 flex-wrap" id="admin-sidebar">
+              <li class="nav-item"><a class="nav-link active btn-sm" href="#" data-view="overview" style="background:var(--gm-green-dark);color:var(--gm-lime)">Dashboard</a></li>
+              <li class="nav-item"><a class="nav-link btn-sm" href="#" data-view="calendar" style="border:1px solid var(--gm-border)">Calendar</a></li>
+              <li class="nav-item"><a class="nav-link btn-sm" href="#" data-view="appointments" style="border:1px solid var(--gm-border)">Appointments</a></li>
+              <li class="nav-item"><a class="nav-link btn-sm" href="#" data-view="clients" style="border:1px solid var(--gm-border)">Clients</a></li>
+              <li class="nav-item"><a class="nav-link btn-sm" href="#" data-view="payments" style="border:1px solid var(--gm-border)">Payments</a></li>
+            </ul>
+          </div>
+
+          <!-- View: Overview / Dashboard -->
+          <div id="admin-view-overview" class="dash-view active">
+            <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+              <div>
+                <h4 class="mb-0">Admin Dashboard</h4>
+                <small class="text-muted">Dodson Grass Masters · Roswell, NM</small>
+              </div>
+              <button class="btn btn-gm" onclick="openNewAppointmentOffcanvas()">
+                <i class="bi bi-plus-lg me-1"></i> New Appointment
+              </button>
+            </div>
+
+            <!-- Stat cards -->
+            <div class="row g-3 mb-4">
+              <div class="col-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon green"><i class="bi bi-calendar-check"></i></div>
+                  <div><div class="stat-val" id="stat-upcoming">—</div><div class="stat-lbl">Upcoming</div></div>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon lime"><i class="bi bi-people"></i></div>
+                  <div><div class="stat-val" id="stat-clients">—</div><div class="stat-lbl">Clients</div></div>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon warn"><i class="bi bi-exclamation-circle"></i></div>
+                  <div><div class="stat-val" id="stat-unpaid">—</div><div class="stat-lbl">Unpaid Jobs</div></div>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon success"><i class="bi bi-cash-stack"></i></div>
+                  <div><div class="stat-val" id="stat-revenue">—</div><div class="stat-lbl">Total Paid</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Today's jobs + quick actions -->
+            <div class="row g-3">
+              <div class="col-lg-8">
+                <div class="gm-table-wrap">
+                  <div class="gm-table-header">
+                    <h5><i class="bi bi-sun me-2" style="color:var(--gm-lime)"></i>Today's Jobs
+                      <span class="ms-2 badge rounded-pill" style="background:var(--gm-green-dark);color:var(--gm-lime)" id="stat-today">0</span>
+                    </h5>
+                    <button class="btn btn-sm btn-gm" onclick="openNewAppointmentOffcanvas()">
+                      <i class="bi bi-plus-lg"></i> Add
+                    </button>
+                  </div>
+                  <div id="today-jobs-list" class="p-3">
+                    <p class="text-muted text-center py-2">Loading…</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="gm-table-wrap h-100">
+                  <div class="gm-table-header"><h5>Quick Actions</h5></div>
+                  <div class="p-3 d-flex flex-column gap-2">
+                    <button class="btn btn-gm w-100" onclick="openNewAppointmentOffcanvas()">
+                      <i class="bi bi-calendar-plus me-2"></i>New Appointment
+                    </button>
+                    <button class="btn btn-outline-secondary w-100" onclick="openClientModal()">
+                      <i class="bi bi-person-plus me-2"></i>New Client
+                    </button>
+                    <button class="btn btn-outline-secondary w-100" onclick="exportPaymentsCSV()">
+                      <i class="bi bi-download me-2"></i>Export CSV
+                    </button>
+                    <hr class="my-1">
+                    <small class="text-muted text-center">
+                      <i class="bi bi-info-circle me-1"></i>
+                      All times shown in Mountain Time (Roswell, NM)
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- View: Calendar -->
+          <div id="admin-view-calendar" class="dash-view">
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+              <h4 class="mb-0">Appointment Calendar</h4>
+              <button class="btn btn-gm" onclick="openNewAppointmentOffcanvas()">
+                <i class="bi bi-plus-lg me-1"></i> New Appointment
+              </button>
+            </div>
+            <div id="admin-calendar-wrap">
+              <div id="admin-calendar"></div>
+            </div>
+          </div>
+
+          <!-- View: Appointments -->
+          <div id="admin-view-appointments" class="dash-view">
+            <div class="gm-table-wrap">
+              <div class="gm-table-header">
+                <h5><i class="bi bi-clipboard-check me-2"></i>All Appointments
+                  <span class="ms-2 text-muted fw-normal" id="appointments-count" style="font-size:.82rem"></span>
+                </h5>
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                  <select class="form-select form-select-sm" id="appt-status-filter" style="width:140px">
+                    <option value="">All Statuses</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                  <button class="btn btn-gm btn-sm" onclick="openNewAppointmentOffcanvas()">
+                    <i class="bi bi-plus-lg"></i> New
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="gm-table">
+                  <thead><tr>
+                    <th>Date / Time</th>
+                    <th>Client</th>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Actions</th>
+                  </tr></thead>
+                  <tbody id="appointments-tbody">
+                    <tr><td colspan="6" class="text-center text-muted py-4">Loading…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- View: Clients -->
+          <div id="admin-view-clients" class="dash-view">
+            <div class="gm-table-wrap">
+              <div class="gm-table-header">
+                <h5><i class="bi bi-people me-2"></i>Clients
+                  <span class="ms-2 text-muted fw-normal" id="clients-count" style="font-size:.82rem"></span>
+                </h5>
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                  <input type="search" class="form-control form-control-sm" id="client-search-input" placeholder="Search clients…" style="width:200px">
+                  <button class="btn btn-gm btn-sm" onclick="openClientModal()">
+                    <i class="bi bi-plus-lg"></i> New Client
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="gm-table">
+                  <thead><tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Last Service</th>
+                    <th>Actions</th>
+                  </tr></thead>
+                  <tbody id="clients-tbody">
+                    <tr><td colspan="6" class="text-center text-muted py-4">Loading…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- View: Payments -->
+          <div id="admin-view-payments" class="dash-view">
+            <!-- Summary row -->
+            <div class="row g-3 mb-3">
+              <div class="col-sm-6">
+                <div class="stat-card">
+                  <div class="stat-icon success"><i class="bi bi-check-circle"></i></div>
+                  <div><div class="stat-val" id="pay-total-paid">—</div><div class="stat-lbl">Total Paid</div></div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="stat-card">
+                  <div class="stat-icon warn"><i class="bi bi-hourglass-split"></i></div>
+                  <div><div class="stat-val" id="pay-count-unpaid">—</div><div class="stat-lbl">Unpaid Jobs</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="gm-table-wrap">
+              <div class="gm-table-header">
+                <h5><i class="bi bi-cash-stack me-2"></i>Payment Tracking</h5>
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                  <select class="form-select form-select-sm" id="payment-filter" style="width:140px">
+                    <option value="all">All Jobs</option>
+                    <option value="pending">Unpaid Only</option>
+                    <option value="paid">Paid Only</option>
+                  </select>
+                  <button class="btn btn-outline-secondary btn-sm" onclick="exportPaymentsCSV()">
+                    <i class="bi bi-download me-1"></i>Export CSV
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="gm-table">
+                  <thead><tr>
+                    <th>Service Date</th>
+                    <th>Client</th>
+                    <th>Service</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Paid Date</th>
+                    <th>Method</th>
+                    <th>Action</th>
+                  </tr></thead>
+                  <tbody id="payments-tbody">
+                    <tr><td colspan="8" class="text-center text-muted py-4">Loading…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </main>
+      </div><!-- /admin-dash -->
+
+      <!-- ── Customer Dashboard ───────────────────────────────────────────── -->
+      <div id="customer-dash" class="d-none d-flex w-100">
+        <!-- Customer Sidebar -->
+        <nav class="dashboard-sidebar d-none d-lg-block" id="customer-sidebar">
+          <div class="sidebar-label">My Account</div>
+          <div class="sidebar-section">
+            <ul class="nav flex-column sidebar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" href="#" data-view="upcoming">
+                  <i class="bi bi-calendar-check"></i> Upcoming
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-view="history">
+                  <i class="bi bi-clock-history"></i> History
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-view="profile">
+                  <i class="bi bi-person-gear"></i> My Profile
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Customer Main -->
+        <main class="dashboard-main">
+          <!-- Mobile tabs -->
+          <div class="d-lg-none mb-3">
+            <ul class="nav nav-pills gap-2" id="customer-sidebar">
+              <li class="nav-item"><a class="nav-link" href="#" data-view="upcoming" style="background:var(--gm-green-dark);color:var(--gm-lime)">Upcoming</a></li>
+              <li class="nav-item"><a class="nav-link" href="#" data-view="history" style="border:1px solid var(--gm-border)">History</a></li>
+              <li class="nav-item"><a class="nav-link" href="#" data-view="profile" style="border:1px solid var(--gm-border)">Profile</a></li>
+            </ul>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="row g-3 mb-4">
+            <div class="col-sm-4">
+              <div class="stat-card">
+                <div class="stat-icon green"><i class="bi bi-calendar-event"></i></div>
+                <div><div class="stat-val" style="font-size:1rem" id="cust-stat-next">—</div><div class="stat-lbl">Next Appointment</div></div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="stat-card">
+                <div class="stat-icon lime"><i class="bi bi-list-check"></i></div>
+                <div><div class="stat-val" id="cust-stat-total">—</div><div class="stat-lbl">Total Visits</div></div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="stat-card">
+                <div class="stat-icon warn"><i class="bi bi-cash"></i></div>
+                <div><div class="stat-val" id="cust-stat-pending">—</div><div class="stat-lbl">Payments Due</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- View: Upcoming -->
+          <div id="cust-view-upcoming" class="dash-view active">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="mb-0">Upcoming Appointments</h5>
+            </div>
+            <div id="cust-upcoming-list">
+              <div class="text-center py-4"><div class="gm-spinner mx-auto"></div></div>
+            </div>
+            <div class="mt-4 p-3 rounded" style="background:var(--gm-off-white);border:1px solid var(--gm-border)">
+              <p class="mb-2 small"><i class="bi bi-info-circle-fill me-2" style="color:var(--gm-green-bright)"></i>
+                <strong>Need to schedule or change an appointment?</strong>
+              </p>
+              <p class="mb-0 small text-muted">
+                <!-- TODO: Replace with actual contact info -->
+                Call or text us at <a href="tel:+15755551234">(575) 555-1234</a> and we'll get you on the calendar.
+                Appointments are managed by our team to ensure quality scheduling.
+              </p>
+            </div>
+          </div>
+
+          <!-- View: History -->
+          <div id="cust-view-history" class="dash-view">
+            <h5 class="mb-3">Service History</h5>
+            <div id="cust-history-list">
+              <div class="text-center py-4"><div class="gm-spinner mx-auto"></div></div>
+            </div>
+          </div>
+
+          <!-- View: Profile -->
+          <div id="cust-view-profile" class="dash-view">
+            <h5 class="mb-4">My Profile</h5>
+            <div class="card border-0 shadow-sm" style="max-width:520px">
+              <div class="card-body p-4">
+                <form id="profile-form">
+                  <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="profile-name" placeholder="Your name">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="profile-email" disabled>
+                    <div class="form-text">Email cannot be changed here. Contact us for help.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="profile-phone" placeholder="(575) 555-0000">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">ZIP Code</label>
+                    <input type="text" class="form-control" id="profile-zip" maxlength="5" placeholder="88201">
+                    <div class="form-text">Must be 88201, 88202, or 88203 (Roswell, NM service area).</div>
+                  </div>
+                  <button type="submit" class="btn btn-gm">
+                    <i class="bi bi-save me-2"></i>Save Changes
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div><!-- /customer-dash -->
+
+    </div><!-- /d-flex -->
+  </div><!-- /app-shell -->
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- MODALS & OFFCANVAS                                                     -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Sign In</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <button class="btn-google btn-google-signin mb-2">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+            Continue with Google
+          </button>
+          <div class="auth-divider">or use email</div>
+          <form id="login-form">
+            <div class="mb-3">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="login-email" required autocomplete="email" placeholder="you@example.com">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" id="login-password" required autocomplete="current-password" placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn btn-gm w-100">Sign In</button>
+          </form>
+          <div class="mt-3 text-center small">
+            <a href="#" id="forgot-password-link">Forgot password?</a>
+            &nbsp;·&nbsp;
+            <a href="#" id="go-to-signup">Create account</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div class="modal fade" id="signupModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:460px">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Create Account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-warning py-2 small mb-3">
+            <i class="bi bi-geo-alt-fill me-1"></i>
+            <strong>Roswell, NM only.</strong> Service area: ZIP codes 88201 · 88202 · 88203
+          </div>
+          <button class="btn-google btn-google-signin mb-2">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+            Sign up with Google
+          </button>
+          <div class="auth-divider">or create with email</div>
+          <form id="signup-form">
+            <div class="row g-2">
+              <div class="col-12">
+                <label class="form-label">Full Name *</label>
+                <input type="text" class="form-control" id="signup-name" required placeholder="Jane Smith">
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-control" id="signup-email" required autocomplete="email" placeholder="jane@example.com">
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-control" id="signup-phone" placeholder="(575) 555-0000">
+              </div>
+              <div class="col-12">
+                <label class="form-label">ZIP Code * <small class="text-muted">(88201 / 88202 / 88203)</small></label>
+                <input type="text" class="form-control" id="signup-zip" required maxlength="5" pattern="8820[123]" placeholder="88201">
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label">Password *</label>
+                <input type="password" class="form-control" id="signup-password" required minlength="8" autocomplete="new-password" placeholder="Min. 8 characters">
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label">Confirm Password *</label>
+                <input type="password" class="form-control" id="signup-confirm" required minlength="8" autocomplete="new-password" placeholder="Repeat password">
+              </div>
+              <div class="col-12 mt-1">
+                <button type="submit" class="btn btn-gm w-100">Create Account</button>
+              </div>
+            </div>
+          </form>
+          <div class="mt-3 text-center small">
+            Already have an account? <a href="#" id="go-to-login">Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Appointment Offcanvas (Admin) -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="apptOffcanvas">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="appt-offcanvas-title">New Appointment</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form id="appt-form">
+        <!-- Client selection -->
+        <div class="mb-3 position-relative">
+          <label class="form-label">Client Name *</label>
+          <input type="hidden" id="appt-client-id">
+          <input type="text" class="form-control" id="appt-client-name" required placeholder="Search or type client name…" autocomplete="off">
+          <div id="client-search-dropdown" class="d-none position-absolute w-100 bg-white border rounded shadow-sm" style="z-index:1000;top:100%;max-height:200px;overflow-y:auto"></div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Address</label>
+          <input type="text" class="form-control" id="appt-client-addr" placeholder="123 Main St, Roswell, NM 88201">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Client Phone</label>
+          <input type="tel" class="form-control" id="appt-client-phone" placeholder="(575) 555-0000">
+        </div>
+        <hr>
+        <div class="mb-3">
+          <label class="form-label">Date &amp; Time *</label>
+          <input type="datetime-local" class="form-control" id="appt-datetime" required>
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col-8">
+            <label class="form-label">Service Type *</label>
+            <select class="form-select" id="appt-service" required>
+              <option value="">— Select —</option>
+              <option value="mow">Lawn Mowing</option>
+              <option value="edge">Edging</option>
+              <option value="blow">Blowing / Cleanup</option>
+              <option value="weed">Weeding</option>
+              <option value="fertilize">Fertilizing</option>
+              <option value="plant">Planting</option>
+              <option value="full">Full Service</option>
+              <option value="other">Other / Hourly</option>
+            </select>
+          </div>
+          <div class="col-4">
+            <label class="form-label">Duration (min)</label>
+            <select class="form-select" id="appt-duration">
+              <option value="30">30</option>
+              <option value="45">45</option>
+              <option value="60" selected>60</option>
+              <option value="90">90</option>
+              <option value="120">120</option>
+              <option value="180">180</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="appt-status">
+            <option value="scheduled">Scheduled</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Recurring</label>
+          <select class="form-select" id="appt-recurring">
+            <option value="none">One-time</option>
+            <option value="weekly">Weekly (8 weeks)</option>
+            <option value="biweekly">Bi-weekly (12 weeks)</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Notes</label>
+          <textarea class="form-control" id="appt-notes" rows="3" placeholder="Gate code, special instructions…"></textarea>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-gm flex-grow-1">Save Appointment</button>
+          <button type="button" class="btn btn-outline-danger d-none" id="delete-appt-btn" title="Delete appointment">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Client Modal (Admin) -->
+  <div class="modal fade" id="clientModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:480px">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="client-modal-title">New Client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="client-form">
+            <div class="mb-3">
+              <label class="form-label">Full Name *</label>
+              <input type="text" class="form-control" id="client-name" required placeholder="Jane Smith">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Service Address</label>
+              <input type="text" class="form-control" id="client-address" placeholder="123 Main St, Roswell, NM 88201">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-sm-6">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-control" id="client-phone" placeholder="(575) 555-0000">
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="client-email" placeholder="jane@example.com">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notes</label>
+              <textarea class="form-control" id="client-notes" rows="3" placeholder="Gate code, yard size, special instructions…"></textarea>
+            </div>
+            <div class="d-flex gap-2 justify-content-end">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-gm">Save Client</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mark Paid Modal (Admin) -->
+  <div class="modal fade" id="markPaidModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:380px">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-cash-stack me-2"></i>Record Payment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="mark-paid-form">
+            <input type="hidden" id="pay-appt-id">
+            <div class="mb-3">
+              <label class="form-label">Amount Collected ($)</label>
+              <input type="number" class="form-control" id="pay-amount" min="0" step="0.01" required placeholder="0.00">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Date Paid</label>
+              <input type="date" class="form-control" id="pay-date" required>
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Payment Method</label>
+              <select class="form-select" id="pay-method">
+                <option value="cash">Cash</option>
+                <option value="check">Check</option>
+              </select>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-outline-secondary flex-grow-1" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-gm flex-grow-1">
+                <i class="bi bi-check-lg me-1"></i>Mark Paid
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- SCRIPTS                                                                 -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Bootstrap 5 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- FullCalendar 6 -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+  <!-- Firebase Compat SDK v10 -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <!-- App JS (order matters: config → auth → admin → customer) -->
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+  <script src="/js/customer.js"></script>
+
+  <script>
+    // ── Misc init ──────────────────────────────────────────────────────────
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').classList.toggle('shadow-lg', window.scrollY > 20);
+    }, { passive: true });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target && !link.dataset.bsToggle && !link.dataset.view) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+          // Close mobile nav
+          const collapse = document.getElementById('navContent');
+          if (collapse.classList.contains('show')) {
+            bootstrap.Collapse.getInstance(collapse)?.hide();
+          }
+        }
+      });
+    });
+
+    // Contact form (no Formspree yet — show instructions)
+    document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const zip = e.target.querySelector('[name=zip]').value.trim();
+      if (!['88201','88202','88203'].includes(zip)) {
+        document.getElementById('contact-form-msg').textContent =
+          'Sorry, we only serve Roswell, NM (ZIP 88201, 88202, 88203).';
+        document.getElementById('contact-form-msg').style.color = 'var(--gm-danger)';
+        return;
+      }
+      // TODO: Formspree integration — add action attr to form and remove this handler
+      document.getElementById('contact-form-msg').textContent =
+        'Thanks! We\'ll be in touch within 24 hours. Or call us at (575) 555-1234.';
+      document.getElementById('contact-form-msg').style.color = 'var(--gm-success)';
+      e.target.reset();
+    });
+
+    // PWA install prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    // Active nav highlighting on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('#mainNav .nav-link').forEach(l => {
+            l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.35 });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>

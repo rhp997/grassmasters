@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.admin == true;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // users collection: users can read/write their own doc; admins have full access
+    match /users/{userId} {
+      allow read: if isAdmin() || isOwner(userId);
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAdmin() || (isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'uid']));
+      allow delete: if isAdmin();
+    }
+
+    // clients collection: admin only
+    match /clients/{clientId} {
+      allow read, write: if isAdmin();
+    }
+
+    // appointments collection: admin full access; customers can read their own
+    match /appointments/{appointmentId} {
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.clientUid == request.auth.uid);
+      allow create, update, delete: if isAdmin();
+    }
+
+    // settings collection: admin only
+    match /settings/{doc} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}
