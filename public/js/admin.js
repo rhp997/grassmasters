@@ -33,14 +33,15 @@ function teardownDashboards() {
 
 // ── Admin Sidebar Navigation ──────────────────────────────────────────────────
 function adminNavSetup() {
-  document.querySelectorAll('#admin-sidebar .sidebar-nav .nav-link').forEach(link => {
+  const allAdminLinks = document.querySelectorAll('#admin-sidebar .sidebar-nav .nav-link, #admin-mobile-nav .nav-link');
+  allAdminLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const target = link.dataset.view;
       document.querySelectorAll('#admin-dash .dash-view').forEach(v => v.classList.remove('active'));
       document.getElementById('admin-view-' + target)?.classList.add('active');
-      document.querySelectorAll('#admin-sidebar .nav-link').forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
+      allAdminLinks.forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('[data-view="' + target + '"]').forEach(l => l.classList.add('active'));
       if (target === 'calendar') adminCalendar?.updateSize();
       if (target === 'clients') renderClientsTable();
       if (target === 'appointments') renderAppointmentsTable();
@@ -53,6 +54,33 @@ function adminNavSetup() {
 async function loadAdminStats() {
   // Stats are derived from live subscription data; initial load shows skeletons
   updateStatCards();
+}
+
+function renderTodayJobs() {
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayJobs = allAppointments.filter(a => a.dateTime?.slice(0, 10) === todayStr);
+  const el = document.getElementById('today-jobs-list');
+  if (!el) return;
+  if (!todayJobs.length) {
+    el.innerHTML = '<p class="text-muted text-center py-3">No jobs scheduled for today.</p>';
+    return;
+  }
+  el.innerHTML = todayJobs.map(a => {
+    const client = allClients.find(c => c.id === a.clientId);
+    const svc = SERVICE_TYPES.find(s => s.value === a.serviceType);
+    return `
+      <div class="d-flex align-items-center gap-3 py-2 border-bottom" onclick="openAppointmentOffcanvas('${a.id}')" style="cursor:pointer">
+        <div class="stat-icon green flex-shrink-0" style="width:40px;height:40px;font-size:1rem">
+          <i class="bi ${svc?.icon || 'bi-tools'}"></i>
+        </div>
+        <div class="flex-grow-1">
+          <strong>${escHtml(client?.name || 'Unknown')}</strong>
+          <small class="text-muted d-block">${escHtml(svc?.label || a.serviceType)} · ${formatMT(a.dateTime)}</small>
+          ${a.notes ? `<small class="text-muted fst-italic">${escHtml(a.notes)}</small>` : ''}
+        </div>
+        <span class="badge-status badge-${a.status}">${a.status}</span>
+      </div>`;
+  }).join('');
 }
 
 function updateStatCards() {
@@ -80,6 +108,7 @@ function subscribeToAppointments() {
     .onSnapshot(snap => {
       allAppointments = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       updateStatCards();
+      renderTodayJobs();
       refreshCalendarEvents();
       // Re-render active table views
       const activeView = document.querySelector('#admin-dash .dash-view.active');

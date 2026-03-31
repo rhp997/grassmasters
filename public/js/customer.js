@@ -13,14 +13,15 @@ function showCustomerDashboard() {
 }
 
 function customerNavSetup() {
-  document.querySelectorAll('#customer-sidebar .sidebar-nav .nav-link').forEach(link => {
+  const allCustLinks = document.querySelectorAll('#customer-sidebar .sidebar-nav .nav-link, #customer-mobile-nav .nav-link');
+  allCustLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const target = link.dataset.view;
       document.querySelectorAll('#customer-dash .dash-view').forEach(v => v.classList.remove('active'));
       document.getElementById('cust-view-' + target)?.classList.add('active');
-      document.querySelectorAll('#customer-sidebar .nav-link').forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
+      allCustLinks.forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('[data-view="' + target + '"]').forEach(l => l.classList.add('active'));
     });
   });
 }
