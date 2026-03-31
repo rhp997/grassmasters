@@ -1571,7 +1571,8 @@
     // Smooth scroll for nav links
     document.querySelectorAll('a[href^="#"]').forEach(link => {
       link.addEventListener('click', e => {
-        const target = document.querySelector(link.getAttribute('href'));
+        const href = link.getAttribute('href');
+        const target = href.length > 1 ? document.querySelector(href) : null;
         if (target && !link.dataset.bsToggle && !link.dataset.view) {
           e.preventDefault();
           target.scrollIntoView({ behavior: 'smooth' });

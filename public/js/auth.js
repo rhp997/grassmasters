@@ -58,48 +58,63 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 async function ensureUserProfile(user, role) {
-  // Use uid as the document ID for both collections — enables direct gets
-  // instead of queries, and simplifies security rule matching
-  const userRef   = db.collection('users').doc(user.uid);
-  const clientRef = db.collection('clients').doc(user.uid);
+  const log = (msg, ...args) => console.log(`[ensureUserProfile] ${msg}`, ...args);
+  log('called — uid:', user.uid, 'role:', role);
 
-  const [userSnap, clientSnap] = await Promise.all([
-    userRef.get(),
-    role !== 'admin' ? clientRef.get() : Promise.resolve({ exists: true })
-  ]);
+  try {
+    const userRef   = db.collection('users').doc(user.uid);
+    const clientRef = db.collection('clients').doc(user.uid);
 
-  const batch = db.batch();
-  let needsCommit = false;
+    log('fetching user and client snapshots…');
+    const [userSnap, clientSnap] = await Promise.all([
+      userRef.get(),
+      role !== 'admin' ? clientRef.get() : Promise.resolve({ exists: true })
+    ]);
+    log('userSnap.exists:', userSnap.exists, '| clientSnap.exists:', clientSnap.exists);
 
-  if (!userSnap.exists) {
-    batch.set(userRef, {
-      uid:         user.uid,
-      email:       user.email,
-      displayName: user.displayName || '',
-      phone:       '',
-      role,
-      zipCode:     '',
-      createdAt:   firebase.firestore.FieldValue.serverTimestamp()
-    });
-    needsCommit = true;
+    const batch = db.batch();
+    let needsCommit = false;
+
+    if (!userSnap.exists) {
+      log('queuing users doc creation');
+      batch.set(userRef, {
+        uid:         user.uid,
+        email:       user.email,
+        displayName: user.displayName || '',
+        phone:       '',
+        role,
+        zipCode:     '',
+        createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+      });
+      needsCommit = true;
+    }
+
+    if (!clientSnap.exists) {
+      log('queuing clients doc creation');
+      batch.set(clientRef, {
+        uid:             user.uid,
+        name:            user.displayName || user.email.split('@')[0],
+        email:           user.email,
+        phone:           '',
+        address:         '',
+        notes:           '',
+        createdBy:       'self-signup',
+        createdAt:       firebase.firestore.FieldValue.serverTimestamp(),
+        lastServiceDate: null
+      });
+      needsCommit = true;
+    }
+
+    if (needsCommit) {
+      log('committing batch…');
+      await batch.commit();
+      log('batch committed successfully');
+    } else {
+      log('nothing to commit — all docs already exist');
+    }
+  } catch (err) {
+    console.error('[ensureUserProfile] ERROR:', err.code, err.message, err);
   }
-
-  if (!clientSnap.exists) {
-    batch.set(clientRef, {
-      uid:             user.uid,
-      name:            user.displayName || user.email.split('@')[0],
-      email:           user.email,
-      phone:           '',
-      address:         '',
-      notes:           '',
-      createdBy:       'self-signup',
-      createdAt:       firebase.firestore.FieldValue.serverTimestamp(),
-      lastServiceDate: null
-    });
-    needsCommit = true;
-  }
-
-  if (needsCommit) await batch.commit();
 }
 
 // ── Nav updates ───────────────────────────────────────────────────────────────
