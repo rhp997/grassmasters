@@ -24,13 +24,25 @@ service cloud.firestore {
     }
 
     // clients collection: admins have full access;
-    // users can create/read/update their own record (doc ID == their uid)
+    // users can create/read/update their own record (doc ID == their uid).
+    // Email-based read allows querying admin-pre-created records for merging.
+    // Claiming rule lets a new user link an admin-created (uid==null) record to their uid.
     match /clients/{clientId} {
       allow read, write: if isAdmin();
       allow create: if isAuthenticated() && clientId == request.auth.uid;
-      allow read:   if isAuthenticated() && clientId == request.auth.uid;
-      allow update: if isAuthenticated() && clientId == request.auth.uid
-                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['uid', 'createdAt', 'createdBy']);
+      allow read:   if isAuthenticated() && (
+                      clientId == request.auth.uid ||
+                      resource.data.email == request.auth.token.email
+                    );
+      allow update: if isAuthenticated() && (
+                      // Normal self-update on uid-based doc (no changing uid/createdAt/createdBy)
+                      (clientId == request.auth.uid &&
+                       !request.resource.data.diff(resource.data).affectedKeys().hasAny(['uid', 'createdAt', 'createdBy'])) ||
+                      // Claiming: mark admin-created (uid==null) record as merged when email matches
+                      (resource.data.email == request.auth.token.email &&
+                       resource.data.uid == null &&
+                       request.resource.data.uid == request.auth.uid)
+                    );
     }
 
     // appointments collection: admin full access; customers can read their own

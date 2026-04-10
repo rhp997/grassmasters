@@ -7,6 +7,13 @@ let clientsListener = null;
 let allAppointments = [];
 let allClients = [];
 
+// Find the canonical client record for an appointment's clientId.
+// Admin-created records that were later claimed keep their old doc ID in
+// the new record's mergedFromId field, so old appointments still resolve.
+function findClient(clientId) {
+  return allClients.find(c => c.id === clientId || c.mergedFromId === clientId);
+}
+
 // ── Show Admin Dashboard ──────────────────────────────────────────────────────
 function showAdminDashboard() {
   document.getElementById('admin-dash')?.classList.remove('d-none');
@@ -66,7 +73,7 @@ function renderTodayJobs() {
     return;
   }
   el.innerHTML = todayJobs.map(a => {
-    const client = allClients.find(c => c.id === a.clientId);
+    const client = findClient(a.clientId);
     const svc = SERVICE_TYPES.find(s => s.value === a.serviceType);
     return `
       <div class="d-flex align-items-center gap-3 py-2 border-bottom" onclick="openAppointmentOffcanvas('${a.id}')" style="cursor:pointer">
@@ -94,7 +101,7 @@ function updateStatCards() {
   const todayJobs  = allAppointments.filter(a => a.dateTime?.slice(0, 10) === todayStr);
 
   setText('stat-upcoming',  upcoming.length);
-  setText('stat-clients',   allClients.length);
+  setText('stat-clients',   allClients.filter(c => !c.mergedTo).length);
   setText('stat-unpaid',    unpaid.length);
   setText('stat-revenue',   formatCurrency(paidAmt));
   setText('stat-today',     todayJobs.length);
@@ -158,7 +165,7 @@ function refreshCalendarEvents() {
   if (!adminCalendar) return;
   adminCalendar.removeAllEvents();
   allAppointments.forEach(a => {
-    const client = allClients.find(c => c.id === a.clientId);
+    const client = findClient(a.clientId);
     adminCalendar.addEvent({
       id:    a.id,
       title: (client?.name || 'Client') + ' · ' + (SERVICE_TYPES.find(s => s.value === a.serviceType)?.label || a.serviceType),
@@ -191,7 +198,7 @@ function renderAppointmentsTable(filterStatus = '') {
   list.sort((a, b) => (b.dateTime || '').localeCompare(a.dateTime || ''));
 
   const html = list.map(a => {
-    const client = allClients.find(c => c.id === a.clientId);
+    const client = findClient(a.clientId);
     return `
       <tr>
         <td>${formatMT(a.dateTime)}</td>
@@ -219,7 +226,8 @@ function renderClientsTable(search = '') {
   const tbody = document.getElementById('clients-tbody');
   if (!tbody) return;
 
-  let list = [...allClients];
+  // Exclude records that have been claimed/merged into a uid-based record
+  let list = allClients.filter(c => !c.mergedTo);
   if (search) {
     const q = search.toLowerCase();
     list = list.filter(c =>
@@ -231,12 +239,17 @@ function renderClientsTable(search = '') {
   }
 
   const html = list.map(c => {
+    // Old appointments may reference the pre-merge admin doc ID stored in mergedFromId
     const lastSvc = allAppointments
-      .filter(a => a.clientId === c.id && a.status === 'completed')
+      .filter(a => (a.clientId === c.id || a.clientId === c.mergedFromId) && a.status === 'completed')
       .sort((a, b) => (b.dateTime || '').localeCompare(a.dateTime || ''))[0];
+    const noAccount = c.uid == null;
     return `
       <tr>
-        <td><strong>${escHtml(c.name)}</strong></td>
+        <td>
+          <strong>${escHtml(c.name)}</strong>
+          ${noAccount ? '<span class="badge bg-secondary ms-1" title="No account — client has not signed up yet">No account</span>' : ''}
+        </td>
         <td>${escHtml(c.address || '—')}</td>
         <td><a href="tel:${escHtml(c.phone)}">${escHtml(c.phone || '—')}</a></td>
         <td><a href="mailto:${escHtml(c.email)}">${escHtml(c.email || '—')}</a></td>
@@ -276,7 +289,7 @@ function renderPaymentsTable(filter = 'all') {
   setText('pay-count-unpaid', totalUnpaid);
 
   const html = list.map(a => {
-    const client = allClients.find(c => c.id === a.clientId);
+    const client = findClient(a.clientId);
     const isPaid = a.paymentStatus === 'paid';
     return `
       <tr class="${isPaid ? '' : 'table-warning-soft'}">
@@ -349,7 +362,7 @@ async function undoPayment(id) {
 function exportPaymentsCSV() {
   const rows = [['Date', 'Client', 'Service', 'Status', 'Amount', 'Paid Date', 'Method']];
   allAppointments.filter(a => a.status !== 'cancelled').forEach(a => {
-    const client = allClients.find(c => c.id === a.clientId);
+    const client = findClient(a.clientId);
     rows.push([
       formatDateMT(a.dateTime),
       client?.name || '',
@@ -395,7 +408,7 @@ function openAppointmentOffcanvas(id) {
   document.getElementById('appt-offcanvas-title').textContent = 'Edit Appointment';
   document.getElementById('delete-appt-btn').classList.remove('d-none');
 
-  const client = allClients.find(c => c.id === appt.clientId);
+  const client = findClient(appt.clientId);
   if (client) populateClientInForm(client);
 
   setValue('appt-datetime',       (appt.dateTime || '').slice(0, 16));
@@ -581,6 +594,7 @@ document.getElementById('client-form')?.addEventListener('submit', async (e) => 
       await db.collection('clients').doc(editingClientId).update(data);
       showToast('Client updated.');
     } else {
+      data.uid = null;  // null until the client creates a Firebase Auth account
       data.createdBy = getCurrentUser()?.uid || '';
       data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
       await db.collection('clients').add(data);

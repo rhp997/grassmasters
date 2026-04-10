@@ -66,9 +66,11 @@ The website should be themed to complement the logo found at /docs/logo.pdf and 
 - **users** (Firebase Auth + Firestore mirror for profile data)
   - Fields: uid, email, phone, displayName, role (admin/customer), zipCode (validated 8820x)
 
-- **clients** (contacts – managed by Admin; auto-created on customer first sign-in)
-  - Fields: clientId, uid (Firebase Auth UID), name, address, phone, email, notes, createdBy, lastServiceDate
-  - A client record is automatically created in a batch write with the user profile when a non-admin user signs in for the first time (`createdBy: 'self-signup'`). Admins can then enrich the record with address, notes, etc.
+- **clients** (contacts – managed by Admin; auto-created or merged on customer first sign-in)
+  - Fields: clientId, uid (Firebase Auth UID — `null` until the client creates an account), name, address, phone, email, notes, createdBy, lastServiceDate, mergedFromId, mergedTo
+  - **Admin-created records** use a random Firestore doc ID and `uid: null`. These are shown with a "No account" badge in the admin client list until the customer signs up.
+  - **On customer first sign-in**, `ensureUserProfile()` queries `clients` for a record matching the customer's email with `uid == null`. If found, the admin data is merged into a new canonical `clients/{uid}` doc, and the old record is marked with `mergedTo: uid` (hiding it from the admin list). The `mergedFromId` field on the new record preserves the link so old appointments (which reference the old doc ID as `clientId`) still resolve correctly via the `findClient()` helper in admin.js.
+  - **Email serves as the unique identifier**: admins enter the client's email when creating a record; customers must sign up with the same email to claim that record and have their profile pre-filled.
 
 - **appointments** (calendar entries)
   - Fields: appointmentId, clientId, dateTime (ISO), serviceType (mow/trim/fertilize/etc.), durationMinutes, status (scheduled/completed/cancelled), notes, paymentStatus (pending/paid), paymentAmount, paymentDate, paidBy (cash/check)

@@ -74,6 +74,7 @@ async function ensureUserProfile(user, role) {
 
     const batch = db.batch();
     let needsCommit = false;
+    let mergedFromAdmin = false;
 
     if (!userSnap.exists) {
       log('queuing users doc creation');
@@ -89,19 +90,55 @@ async function ensureUserProfile(user, role) {
       needsCommit = true;
     }
 
-    if (!clientSnap.exists) {
-      log('queuing clients doc creation');
-      batch.set(clientRef, {
-        uid:             user.uid,
-        name:            user.displayName || user.email.split('@')[0],
-        email:           user.email,
-        phone:           '',
-        address:         '',
-        notes:           '',
-        createdBy:       'self-signup',
-        createdAt:       firebase.firestore.FieldValue.serverTimestamp(),
-        lastServiceDate: null
-      });
+    if (!clientSnap.exists && role !== 'admin') {
+      // Check for an admin-pre-created client record matching this email
+      log('no clients/{uid} doc — querying by email for admin-created record…');
+      const emailSnap = await db.collection('clients')
+        .where('email', '==', user.email)
+        .where('uid', '==', null)
+        .limit(1)
+        .get();
+
+      if (!emailSnap.empty) {
+        // Found an admin-created record — migrate its data into clients/{uid}
+        const adminDoc  = emailSnap.docs[0];
+        const adminData = adminDoc.data();
+        log('found admin-created record:', adminDoc.id, '— merging into clients/', user.uid);
+
+        batch.set(clientRef, {
+          uid:             user.uid,
+          name:            adminData.name  || user.displayName || user.email.split('@')[0],
+          email:           user.email,
+          phone:           adminData.phone   || '',
+          address:         adminData.address || '',
+          notes:           adminData.notes   || '',
+          createdBy:       adminData.createdBy || 'admin',
+          createdAt:       adminData.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+          lastServiceDate: adminData.lastServiceDate || null,
+          mergedFromId:    adminDoc.id   // retains link to old appointments
+        });
+
+        // Mark old admin record as claimed so the admin list stops showing it as a duplicate
+        batch.update(adminDoc.ref, {
+          uid:      user.uid,
+          mergedTo: user.uid
+        });
+
+        mergedFromAdmin = true;
+      } else {
+        log('no admin-created record found — creating fresh clients doc');
+        batch.set(clientRef, {
+          uid:             user.uid,
+          name:            user.displayName || user.email.split('@')[0],
+          email:           user.email,
+          phone:           '',
+          address:         '',
+          notes:           '',
+          createdBy:       'self-signup',
+          createdAt:       firebase.firestore.FieldValue.serverTimestamp(),
+          lastServiceDate: null
+        });
+      }
       needsCommit = true;
     }
 
@@ -109,6 +146,9 @@ async function ensureUserProfile(user, role) {
       log('committing batch…');
       await batch.commit();
       log('batch committed successfully');
+      if (mergedFromAdmin) {
+        showToast('Welcome! Your profile has been pre-filled from our records.');
+      }
     } else {
       log('nothing to commit — all docs already exist');
     }
