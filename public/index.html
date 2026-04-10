@@ -1395,13 +1395,28 @@
                             <option value="cancelled">Cancelled</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Recurring</label>
-                        <select class="form-select" id="appt-recurring">
-                            <option value="none">One-time</option>
-                            <option value="weekly">Weekly (8 weeks)</option>
-                            <option value="biweekly">Bi-weekly (12 weeks)</option>
-                        </select>
+                    <div class="row g-2 mb-3">
+                        <div class="col-7">
+                            <label class="form-label">Recurring</label>
+                            <select class="form-select" id="appt-recurring">
+                                <option value="none">One-time</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="biweekly">Bi-weekly</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <label class="form-label">Occurrences</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="appt-recurrence-count"
+                                min="1"
+                                max="16"
+                                value="8"
+                                disabled
+                                title="Number of appointments to create (including this one)"
+                            >
+                        </div>
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Notes</label>
@@ -1543,6 +1558,33 @@
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Recurring Appointment Modal -->
+        <div class="modal fade" id="deleteRecurringModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" style="max-width:420px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-calendar-x me-2"></i>
+                            Delete Recurring Appointment
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-1">This appointment is part of a recurring series.</p>
+                        <p id="delete-recurring-info" class="text-muted small mb-0"></p>
+                    </div>
+                    <div class="modal-footer flex-column gap-2 align-items-stretch">
+                        <button type="button" class="btn btn-outline-danger" id="delete-this-only-btn">
+                            <i class="bi bi-calendar-x me-2"></i>Delete This Appointment Only
+                        </button>
+                        <button type="button" class="btn btn-danger" id="delete-all-remaining-btn">
+                            <i class="bi bi-trash me-2"></i>Delete All Remaining in Series
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

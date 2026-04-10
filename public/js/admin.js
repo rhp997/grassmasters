@@ -386,14 +386,32 @@ function exportPaymentsCSV() {
 // ── Appointment Offcanvas (Create/Edit) ───────────────────────────────────────
 let editingApptId = null;
 
+// Returns the current local date/time formatted for a datetime-local input
+function nowDatetimeLocal() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// Enable or disable the recurrence count input based on the recurring select value
+function updateRecurrenceCountState() {
+  const recurring = document.getElementById('appt-recurring')?.value;
+  const countInput = document.getElementById('appt-recurrence-count');
+  if (!countInput) return;
+  countInput.disabled = !recurring || recurring === 'none';
+}
+
+document.getElementById('appt-recurring')?.addEventListener('change', updateRecurrenceCountState);
+
 function openNewAppointmentOffcanvas(dateStr = '', clientId = '') {
   editingApptId = null;
   document.getElementById('appt-form')?.reset();
   document.getElementById('appt-offcanvas-title').textContent = 'New Appointment';
   document.getElementById('delete-appt-btn').classList.add('d-none');
-  if (dateStr) {
-    document.getElementById('appt-datetime').value = dateStr.slice(0, 16);
-  }
+  // Default to current date/time; override with calendar-click date if provided
+  document.getElementById('appt-datetime').value = dateStr ? dateStr.slice(0, 16) : nowDatetimeLocal();
+  document.getElementById('appt-recurrence-count').value = 8;
+  document.getElementById('appt-recurrence-count').disabled = true;
   if (clientId) {
     const client = allClients.find(c => c.id === clientId);
     if (client) populateClientInForm(client);
@@ -411,12 +429,15 @@ function openAppointmentOffcanvas(id) {
   const client = findClient(appt.clientId);
   if (client) populateClientInForm(client);
 
-  setValue('appt-datetime',       (appt.dateTime || '').slice(0, 16));
-  setValue('appt-service',        appt.serviceType || '');
-  setValue('appt-duration',       appt.durationMinutes || '60');
-  setValue('appt-status',         appt.status || 'scheduled');
-  setValue('appt-recurring',      appt.recurring || 'none');
-  setValue('appt-notes',          appt.notes || '');
+  const recurring = appt.recurring || 'none';
+  setValue('appt-datetime',          (appt.dateTime || '').slice(0, 16));
+  setValue('appt-service',           appt.serviceType || '');
+  setValue('appt-duration',          appt.durationMinutes || '60');
+  setValue('appt-status',            appt.status || 'scheduled');
+  setValue('appt-recurring',         recurring);
+  setValue('appt-recurrence-count',  appt.recurrenceCount || 8);
+  setValue('appt-notes',             appt.notes || '');
+  document.getElementById('appt-recurrence-count').disabled = recurring === 'none';
 
   new bootstrap.Offcanvas(document.getElementById('apptOffcanvas')).show();
 }
@@ -458,14 +479,15 @@ function selectClientForAppt(clientId) {
 
 document.getElementById('appt-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const clientId   = document.getElementById('appt-client-id').value;
-  const clientName = document.getElementById('appt-client-name').value.trim();
-  const dateTime   = document.getElementById('appt-datetime').value;
-  const serviceType= document.getElementById('appt-service').value;
-  const duration   = parseInt(document.getElementById('appt-duration').value) || 60;
-  const status     = document.getElementById('appt-status').value;
-  const recurring  = document.getElementById('appt-recurring').value;
-  const notes      = document.getElementById('appt-notes').value.trim();
+  const clientId        = document.getElementById('appt-client-id').value;
+  const clientName      = document.getElementById('appt-client-name').value.trim();
+  const dateTime        = document.getElementById('appt-datetime').value;
+  const serviceType     = document.getElementById('appt-service').value;
+  const duration        = parseInt(document.getElementById('appt-duration').value) || 60;
+  const status          = document.getElementById('appt-status').value;
+  const recurring       = document.getElementById('appt-recurring').value;
+  const recurrenceCount = Math.min(16, Math.max(1, parseInt(document.getElementById('appt-recurrence-count').value) || 8));
+  const notes           = document.getElementById('appt-notes').value.trim();
 
   if (!dateTime || !serviceType || !clientName) {
     showToast('Please fill in all required fields.', 'error');
@@ -492,15 +514,22 @@ document.getElementById('appt-form')?.addEventListener('submit', async (e) => {
       resolvedClientId = clientRef.id;
     }
 
+    // Generate a group ID to link all appointments in a recurring series
+    const recurringGroupId = (!editingApptId && recurring !== 'none')
+      ? (Date.now().toString(36) + Math.random().toString(36).slice(2, 7))
+      : (editingApptId ? (allAppointments.find(a => a.id === editingApptId)?.recurringGroupId || null) : null);
+
     const data = {
-      clientId:        resolvedClientId,
+      clientId:         resolvedClientId,
       dateTime,
       serviceType,
-      durationMinutes: duration,
+      durationMinutes:  duration,
       status,
       recurring,
+      recurrenceCount:  recurring !== 'none' ? recurrenceCount : null,
+      recurringGroupId: recurringGroupId || null,
       notes,
-      paymentStatus:   editingApptId
+      paymentStatus:    editingApptId
         ? (allAppointments.find(a => a.id === editingApptId)?.paymentStatus || 'pending')
         : 'pending',
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -514,13 +543,13 @@ document.getElementById('appt-form')?.addEventListener('submit', async (e) => {
       data.createdBy = getCurrentUser()?.uid || '';
       await db.collection('appointments').add(data);
 
-      // Handle recurring appointments (weekly / bi-weekly)
+      // Create additional appointments in the recurring series
       if (recurring !== 'none') {
-        const weeks = recurring === 'weekly' ? [1, 2, 3, 4, 5, 6, 7, 8] : [2, 4, 6, 8, 10, 12];
+        const intervalWeeks = recurring === 'weekly' ? 1 : 2;
         const baseDate = new Date(dateTime);
-        for (const w of weeks) {
+        for (let i = 1; i < recurrenceCount; i++) {
           const d = new Date(baseDate);
-          d.setDate(d.getDate() + w * 7);
+          d.setDate(d.getDate() + i * intervalWeeks * 7);
           await db.collection('appointments').add({
             ...data,
             dateTime:  d.toISOString().slice(0, 16),
@@ -528,7 +557,7 @@ document.getElementById('appt-form')?.addEventListener('submit', async (e) => {
           });
         }
       }
-      showToast('Appointment created.');
+      showToast('Appointment created' + (recurring !== 'none' ? ` (${recurrenceCount} total)` : '') + '.');
     }
 
     bootstrap.Offcanvas.getInstance(document.getElementById('apptOffcanvas'))?.hide();
@@ -540,13 +569,56 @@ document.getElementById('appt-form')?.addEventListener('submit', async (e) => {
 });
 
 async function deleteAppointment(id) {
-  if (!confirm('Delete this appointment? This cannot be undone.')) return;
-  try {
-    await db.collection('appointments').doc(id).delete();
-    bootstrap.Offcanvas.getInstance(document.getElementById('apptOffcanvas'))?.hide();
-    showToast('Appointment deleted.');
-  } catch (err) {
-    showToast('Error: ' + err.message, 'error');
+  const appt = allAppointments.find(a => a.id === id);
+  if (!appt) return;
+
+  if (appt.recurringGroupId) {
+    // Find remaining appointments in this series (on or after this one)
+    const remaining = allAppointments
+      .filter(a => a.recurringGroupId === appt.recurringGroupId && a.dateTime >= appt.dateTime)
+      .sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+
+    const infoEl = document.getElementById('delete-recurring-info');
+    if (infoEl) {
+      infoEl.textContent = `${remaining.length} appointment${remaining.length !== 1 ? 's' : ''} remaining in this series (including this one).`;
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('deleteRecurringModal'));
+
+    document.getElementById('delete-this-only-btn').onclick = async () => {
+      modal.hide();
+      try {
+        await db.collection('appointments').doc(id).delete();
+        bootstrap.Offcanvas.getInstance(document.getElementById('apptOffcanvas'))?.hide();
+        showToast('Appointment deleted.');
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+      }
+    };
+
+    document.getElementById('delete-all-remaining-btn').onclick = async () => {
+      modal.hide();
+      try {
+        const batch = db.batch();
+        remaining.forEach(a => batch.delete(db.collection('appointments').doc(a.id)));
+        await batch.commit();
+        bootstrap.Offcanvas.getInstance(document.getElementById('apptOffcanvas'))?.hide();
+        showToast(`${remaining.length} appointment${remaining.length !== 1 ? 's' : ''} deleted.`);
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+      }
+    };
+
+    modal.show();
+  } else {
+    if (!confirm('Delete this appointment? This cannot be undone.')) return;
+    try {
+      await db.collection('appointments').doc(id).delete();
+      bootstrap.Offcanvas.getInstance(document.getElementById('apptOffcanvas'))?.hide();
+      showToast('Appointment deleted.');
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
   }
 }
 
