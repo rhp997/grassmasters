@@ -91,17 +91,21 @@ async function ensureUserProfile(user, role) {
     }
 
     if (!clientSnap.exists && role !== 'admin') {
-      // Check for an admin-pre-created client record matching this email
+      // Check for an admin-pre-created client record matching this email.
+      // uid == null covers explicit null AND missing field (undefined), so we
+      // filter client-side rather than using .where('uid','==',null) which only
+      // matches documents where the field is explicitly set to null.
       log('no clients/{uid} doc — querying by email for admin-created record…');
       const emailSnap = await db.collection('clients')
         .where('email', '==', user.email)
-        .where('uid', '==', null)
-        .limit(1)
+        .limit(5)
         .get();
 
-      if (!emailSnap.empty) {
+      // Find an unclaimed record: uid null/missing, and not the uid-based doc itself
+      const adminDoc = emailSnap.docs.find(d => d.id !== user.uid && d.data().uid == null) || null;
+
+      if (adminDoc) {
         // Found an admin-created record — migrate its data into clients/{uid}
-        const adminDoc  = emailSnap.docs[0];
         const adminData = adminDoc.data();
         log('found admin-created record:', adminDoc.id, '— merging into clients/', user.uid);
 
