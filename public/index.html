@@ -9,8 +9,18 @@
         <!-- Favicons -->
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"
+        >
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"
+        >
         <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
         <!-- PWA manifest -->
         <link rel="manifest" href="/site.webmanifest">
@@ -433,8 +443,7 @@
                         <div class="col-lg-6">
                             <div class="contact-card">
                                 <h5 class="mb-4" style="color:var(--gm-green-dark)">Send a Message</h5>
-                                <!-- TODO: Add action="https://formspree.io/f/YOUR_ID" method="POST" when Formspree account is ready -->
-                                <form id="contact-form">
+                                <form id="contact-form" action="https://formspree.io/f/mrerprze" method="POST">
                                     <div class="row g-3">
                                         <div class="col-sm-6">
                                             <label class="form-label">Your Name *</label>
@@ -1584,10 +1593,12 @@
                     </div>
                     <div class="modal-footer flex-column gap-2 align-items-stretch">
                         <button type="button" class="btn btn-outline-danger" id="delete-this-only-btn">
-                            <i class="bi bi-calendar-x me-2"></i>Delete This Appointment Only
+                            <i class="bi bi-calendar-x me-2"></i>
+                            Delete This Appointment Only
                         </button>
                         <button type="button" class="btn btn-danger" id="delete-all-remaining-btn">
-                            <i class="bi bi-trash me-2"></i>Delete All Remaining in Series
+                            <i class="bi bi-trash me-2"></i>
+                            Delete All Remaining in Series
                         </button>
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
@@ -1640,20 +1651,46 @@
     });
 
     // Contact form (no Formspree yet — show instructions)
-    document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+    document.getElementById('contact-form')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const zip = e.target.querySelector('[name=zip]').value.trim();
+      const form  = e.target;
+      const msgEl = document.getElementById('contact-form-msg');
+      const btn   = form.querySelector('button[type=submit]');
+
+      // ZIP validation before sending
+      const zip = form.querySelector('[name=zip]').value.trim();
       if (!['88201','88202','88203'].includes(zip)) {
-        document.getElementById('contact-form-msg').textContent =
-          'Sorry, we only serve Roswell, NM (ZIP 88201, 88202, 88203).';
-        document.getElementById('contact-form-msg').style.color = 'var(--gm-danger)';
+        msgEl.textContent = 'Sorry, we only serve Roswell, NM (ZIP 88201, 88202, 88203).';
+        msgEl.style.color = 'var(--gm-danger)';
         return;
       }
-      // TODO: Formspree integration — add action attr to form and remove this handler
-      document.getElementById('contact-form-msg').textContent =
-        'Thanks! We\'ll be in touch within 24 hours. Or call us at (575) 555-1234.';
-      document.getElementById('contact-form-msg').style.color = 'var(--gm-success)';
-      e.target.reset();
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending…';
+      msgEl.textContent = '';
+
+      try {
+        const res = await fetch(form.action, {
+          method:  'POST',
+          body:    new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          msgEl.textContent = 'Thanks! We\'ll be in touch within 24 hours.';
+          msgEl.style.color = 'var(--gm-success)';
+          form.reset();
+        } else {
+          const data = await res.json().catch(() => ({}));
+          msgEl.textContent = data.error || 'Something went wrong — please try again.';
+          msgEl.style.color = 'var(--gm-danger)';
+        }
+      } catch {
+        msgEl.textContent = 'Network error — please check your connection and try again.';
+        msgEl.style.color = 'var(--gm-danger)';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-send me-2"></i>Send Message';
+      }
     });
 
     // PWA install prompt
