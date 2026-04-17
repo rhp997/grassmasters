@@ -15,6 +15,27 @@ const admin     = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
 
+// ── 0. SendGrid test (invoke via: firebase functions:shell → testSendGrid({to:'you@example.com'})) ──
+exports.testSendGrid = functions.https.onCall(async (data) => {
+  const sgConfig = functions.config().sendgrid || {};
+  const result = { config: { keySet: !!sgConfig.key, from: sgConfig.from || "(not set)" } };
+  if (!sgConfig.key) return { ...result, error: "sendgrid.key not configured" };
+
+  const sgMail = require("@sendgrid/mail");
+  sgMail.setApiKey(sgConfig.key);
+  try {
+    await sgMail.send({
+      to:      data.to || sgConfig.from,
+      from:    sgConfig.from,
+      subject: "Dodson Grass Masters — SendGrid test",
+      text:    "SendGrid is configured and working correctly.",
+    });
+    return { ...result, success: true };
+  } catch (e) {
+    return { ...result, error: e.message, code: e.code, response: e.response?.body };
+  }
+});
+
 // ── 1. Set Admin Custom Claim ─────────────────────────────────────────────────
 // Call from admin console or a trusted script to grant admin role.
 // Usage: firebase functions:shell → setAdminClaim({uid: 'USER_UID'})
@@ -88,7 +109,7 @@ exports.onAppointmentWrite = functions.firestore
         })
       : "TBD";
 
-    const msg = `Your Dodson Grass Masters appointment is confirmed for ${dateStr} at ${client.address || "your property"}, Roswell, NM. Questions? Call/text (575) 555-1234.`;
+    const msg = `Your Dodson Grass Masters appointment is confirmed for ${dateStr} at ${client.address || "your property"}, Roswell, NM. Questions? Call/text (575) 626-8482.`;
 
     const promises = [];
 
