@@ -240,16 +240,19 @@ document.getElementById('signup-form')?.addEventListener('submit', async (e) => 
 });
 
 // ── Google Sign-In ────────────────────────────────────────────────────────────
+// Handle redirect result on page load (Google returns here after OAuth flow)
+auth.getRedirectResult().catch((err) => {
+  if (err.code && err.code !== 'auth/cancelled-popup-request') {
+    showToast(friendlyAuthError(err.code), 'error');
+  }
+});
+
 document.querySelectorAll('.btn-google-signin').forEach(btn => {
-  btn.addEventListener('click', async () => {
+  btn.addEventListener('click', () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    try {
-      await auth.signInWithPopup(provider);
-    } catch (err) {
-      if (err.code !== 'auth/popup-closed-by-user') {
-        showToast(friendlyAuthError(err.code), 'error');
-      }
-    }
+    auth.signInWithRedirect(provider).catch((err) => {
+      showToast(friendlyAuthError(err.code), 'error');
+    });
   });
 });
 
@@ -288,8 +291,11 @@ function friendlyAuthError(code) {
     'auth/too-many-requests':        'Too many attempts. Please try again later.',
     'auth/invalid-credential':       'Invalid email or password.',
     'auth/network-request-failed':   'Network error. Check your connection.',
+    'auth/popup-blocked':            'Sign-in popup was blocked by your browser.',
+    'auth/unauthorized-domain':      'This domain is not authorized for Google Sign-In. Contact the site admin.',
+    'auth/cancelled-popup-request':  'Sign-in was cancelled.',
   };
-  return map[code] || 'Authentication error. Please try again.';
+  return map[code] || `Authentication error (${code}). Please try again.`;
 }
 
 // ── Switch between login/signup modals ────────────────────────────────────────

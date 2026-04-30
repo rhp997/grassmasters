@@ -101,12 +101,20 @@ exports.onAppointmentWrite = functions.firestore
     const client = clientSnap.data();
     if (!client.email && !client.phone) return null;
 
+    // dateTime is stored as "YYYY-MM-DDTHH:mm" in Mountain Time (no TZ offset).
+    // Node.js (UTC) would misparse it as UTC, so we supply the correct MT offset.
+    // MDT (UTC−6) runs roughly March–November; MST (UTC−7) the rest of the year.
     const dateStr = after.dateTime
-      ? new Date(after.dateTime).toLocaleString("en-US", {
-          timeZone: "America/Denver",
-          weekday: "long", month: "long", day: "numeric",
-          year: "numeric", hour: "numeric", minute: "2-digit"
-        })
+      ? (() => {
+          const dt = after.dateTime;
+          const month = parseInt(dt.substring(5, 7), 10);
+          const offset = (month >= 3 && month <= 11) ? "-06:00" : "-07:00";
+          return new Date(dt + ":00" + offset).toLocaleString("en-US", {
+            timeZone: "America/Denver",
+            weekday: "long", month: "long", day: "numeric",
+            year: "numeric", hour: "numeric", minute: "2-digit"
+          });
+        })()
       : "TBD";
 
     const msg = `Your Dodson Grass Masters appointment is confirmed for ${dateStr} at ${client.address || "your property"}, Roswell, NM. Questions? Call/text (575) 626-8482.`;

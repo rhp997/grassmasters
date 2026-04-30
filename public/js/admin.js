@@ -64,7 +64,7 @@ async function loadAdminStats() {
 }
 
 function renderTodayJobs() {
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: TIMEZONE });
   const todayJobs = allAppointments.filter(a => a.dateTime?.slice(0, 10) === todayStr);
   const el = document.getElementById('today-jobs-list');
   if (!el) return;
@@ -91,8 +91,7 @@ function renderTodayJobs() {
 }
 
 function updateStatCards() {
-  const now = new Date();
-  const todayStr = now.toISOString().slice(0, 10);
+  const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: TIMEZONE });
 
   const upcoming   = allAppointments.filter(a => a.status === 'scheduled' && a.dateTime >= todayStr);
   const unpaid     = allAppointments.filter(a => a.paymentStatus === 'pending' && a.status !== 'cancelled');
