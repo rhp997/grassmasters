@@ -3,7 +3,7 @@
 
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyB7HGxz_RrckU7liCA-iseuA4cc6Ztax1w",
-  authDomain:        "grassmasters-236aa.firebaseapp.com",
+  authDomain:        "dodsongrassmasters.com",
   projectId:         "grassmasters-236aa",
   storageBucket:     "grassmasters-236aa.firebasestorage.app",
   messagingSenderId: "676435370651",
