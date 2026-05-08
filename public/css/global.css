@@ -471,6 +471,15 @@ footer h6 {
 }
 footer a { color: rgba(255,255,255,.65); text-decoration: none; font-size: .9rem; }
 footer a:hover { color: var(--gm-lime); }
+footer .footer-social-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; border-radius: 50%;
+  background: rgba(255,255,255,.1); color: rgba(255,255,255,.7);
+  font-size: 1rem; transition: background .2s, color .2s;
+}
+footer .footer-social-link:hover { background: var(--gm-lime); color: var(--gm-text-dark); }
+.nav-social-link { opacity: .75; font-size: 1.1rem; padding-inline: .4rem !important; }
+.nav-social-link:hover { opacity: 1; }
 footer .footer-bottom {
   border-top: 1px solid rgba(255,255,255,.1);
   padding-top: 1.2rem;
